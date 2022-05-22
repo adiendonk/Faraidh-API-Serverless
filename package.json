@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/alamrumambi/Faraidh-API#readme",
   "dependencies": {
+    "aws-serverless-express": "^3.4.0",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1"

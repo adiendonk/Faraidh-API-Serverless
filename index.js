@@ -6,5 +6,5 @@ exports.handler = async (event) => {
         statusCode: 200,
         body: Controller.getFormat,
     };
-    return response;
+    return Controller.getFormat();
 };

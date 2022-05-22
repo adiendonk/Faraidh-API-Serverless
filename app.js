@@ -11,6 +11,6 @@ app.use(require('./router'));
 
 const serverlessExpress = require('aws-serverless-express');
 const server = serverlessExpress.createServer(app);
-exports.main = (event, context) => serverlessExpress.proxy(server, event, context)
+exports.handler  = (event, context) => serverlessExpress.proxy(server, event, context)
 
 //app.listen(port, () => console.log(`Running in port ${port}...`));

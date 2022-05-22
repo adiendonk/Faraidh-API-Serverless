@@ -10,7 +10,7 @@ exports.handler = async (event) => {
 
         response = {
             statusCode: 200,
-            body: body,
+            body: body.total_harta,
         };
     }else{
         response = {

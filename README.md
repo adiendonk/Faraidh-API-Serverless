@@ -1,4 +1,6 @@
-# Faraidh-API v1.0
+# Faraidh-API-Serverless v1.0
+
+This is a fork repository from https://github.com/alamrumambi/Faraidh-API that is modified to be implemented in AWS Lambda Function, also added a simple English and Bahasa Indonesia translation on nama and bagian_hukum_waris. Credits to alamrumambi, Jazakumullah Khairan.
 
 Faraidh-api is a rest api for determining inheritance rights in accordance with Islamic law.
 

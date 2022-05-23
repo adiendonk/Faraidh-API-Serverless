@@ -32,7 +32,7 @@ class Ahli_Waris {
     }
 
     // ======================================= MAIN SOLVING =======================================
-    static solving(body) {
+    static solving(body,bahasa) {
         const {
             anak_laki_laki,
             cucu_laki_laki,
@@ -64,7 +64,7 @@ class Ahli_Waris {
             const kandidatAhliWaris = {
                 anak_laki_laki, anak_perempuan, ayah, kakek, suami, istri, ibu, nenek, ibu_kakek
             };
-            return this.haveSon(kandidatAhliWaris, body.total_harta);
+            return this.haveSon(kandidatAhliWaris, body.total_harta, bahasa);
         }
         //jika punya cucu laki-laki
         else if (cucu_laki_laki > 0) {
@@ -111,7 +111,7 @@ class Ahli_Waris {
     // =======================================
     //        JIKA PUNYA ANAK LAKI-LAKI
     // =======================================
-    static haveSon(body, funds) {
+    static haveSon(body, funds, bahasa) {
         const { anak_laki_laki, anak_perempuan, ayah, kakek, suami, istri, ibu, nenek, ibu_kakek } = body;
         let result = [];
 
@@ -190,18 +190,18 @@ class Ahli_Waris {
         console.log('sampai disini');
 
         if (anak_perempuan > 0) {
-            result.unshift(new Beneficiary('anak_perempuan', '1/2 bagian anak laki-laki', anak_perempuan));
-            result.unshift(new Beneficiary('anak_laki_laki', '2 kali lipat anak perempuan', anak_laki_laki));
+            result.unshift(new Beneficiary('anak_perempuan', bahasa==='id'?'1/2 bagian anak laki-laki':'1/2 of son\'s share', anak_perempuan));
+            result.unshift(new Beneficiary('anak_laki_laki', bahasa==='id'?'2 kali lipat anak perempuan':'2 times of daughter\'s share', anak_laki_laki));
             let pembilangAnak = (anak_laki_laki * 2) + anak_perempuan;
             // pembilang = pembilang * pembilangAnak;
             console.log('pembilang anak >> ', pembilangAnak);
-            result[dataIndex(['anak_laki_laki'], 'nama', result)].updateCountPart(`${anak_laki_laki * 2}/${pembilangAnak} dari sisa ${sisaPenyebut}/${pembilang}`);
+            result[dataIndex(['anak_laki_laki'], 'nama', result)].updateCountPart(`${anak_laki_laki * 2}/${pembilangAnak} ${bahasa==='id'?'dari sisa':'of the remaining'} ${sisaPenyebut}/${pembilang}`);
             result[dataIndex(['anak_laki_laki'], 'nama', result)].updateFunds((anak_laki_laki * 2) * lastFunds / pembilangAnak);
-            result[dataIndex(['anak_perempuan'], 'nama', result)].updateCountPart(`${anak_perempuan}/${pembilangAnak} dari sisa ${sisaPenyebut}/${pembilang}`);
+            result[dataIndex(['anak_perempuan'], 'nama', result)].updateCountPart(`${anak_perempuan}/${pembilangAnak} ${bahasa==='id'?'dari sisa':'of the remaining'} ${sisaPenyebut}/${pembilang}`);
             result[dataIndex(['anak_perempuan'], 'nama', result)].updateFunds(anak_perempuan * lastFunds / pembilangAnak);
         }
         else {
-            result.unshift(new Beneficiary('anak_laki_laki', 'Sisa pembagian seluruh harta', anak_laki_laki));
+            result.unshift(new Beneficiary('anak_laki_laki', bahasa==='id'?'Sisa pembagian seluruh harta':'The remaining of all assets', anak_laki_laki));
             result[dataIndex(['anak_laki_laki'], 'nama', result)].updateCountPart(`${sisaPenyebut}/${pembilang}`);
             result[dataIndex(['anak_laki_laki'], 'nama', result)].updateFunds(lastFunds);
         }
@@ -212,7 +212,7 @@ class Ahli_Waris {
     // =======================================
     //        JIKA PUNYA CUCU LAKI-LAKI
     // =======================================
-    static haveGrandSon(body, funds) {
+    static haveGrandSon(body, funds, bahasa) {
         const { cucu_laki_laki, anak_perempuan, cucu_perempuan, ayah, kakek, suami, istri, ibu, nenek, ibu_kakek } = body;
         let result = [];
 
@@ -311,18 +311,18 @@ class Ahli_Waris {
         let lastFunds = sisaPenyebut * funds / pembilang;
 
         if (cucu_perempuan > 0) {
-            result.unshift(new Beneficiary('cucu_perempuan', '1/2 bagian cucu laki-laki', cucu_perempuan));
-            result.unshift(new Beneficiary('cucu_laki_laki', '2 kali lipat cucu perempuan', cucu_laki_laki));
+            result.unshift(new Beneficiary('cucu_perempuan', bahasa==='id'?'1/2 bagian cucu laki-laki':'1/2 part of grandson\'s share', cucu_perempuan));
+            result.unshift(new Beneficiary('cucu_laki_laki', bahasa==='id'?'2 kali lipat cucu perempuan':'2 times of granddaughter\'s share', cucu_laki_laki));
             let pembilangCucu = (cucu_laki_laki * 2) + cucu_perempuan;
             // pembilang = pembilang * pembilangAnak;
             console.log('pembilang anak >> ', pembilangCucu);
-            result[dataIndex(['cucu_laki_laki'], 'nama', result)].updateCountPart(`${cucu_laki_laki * 2}/${pembilangCucu} dari sisa ${sisaPenyebut}/${pembilang}`);
+            result[dataIndex(['cucu_laki_laki'], 'nama', result)].updateCountPart(`${cucu_laki_laki * 2}/${pembilangCucu} ${bahasa==='id'?'dari sisa':'of the remaining'} ${sisaPenyebut}/${pembilang}`);
             result[dataIndex(['cucu_laki_laki'], 'nama', result)].updateFunds((cucu_laki_laki * 2) * lastFunds / pembilangCucu);
-            result[dataIndex(['cucu_perempuan'], 'nama', result)].updateCountPart(`${cucu_perempuan}/${pembilangCucu} dari sisa ${sisaPenyebut}/${pembilang}`);
+            result[dataIndex(['cucu_perempuan'], 'nama', result)].updateCountPart(`${cucu_perempuan}/${pembilangCucu} ${bahasa==='id'?'dari sisa':'of the remaining'} ${sisaPenyebut}/${pembilang}`);
             result[dataIndex(['cucu_perempuan'], 'nama', result)].updateFunds(cucu_perempuan * lastFunds / pembilangCucu);
         }
         else {
-            result.unshift(new Beneficiary('cucu_laki_laki', 'Sisa pembagian seluruh harta', cucu_laki_laki));
+            result.unshift(new Beneficiary('cucu_laki_laki', bahasa==='id'?'Sisa pembagian seluruh harta':'The remaining of all assets', cucu_laki_laki));
             result[dataIndex(['cucu_laki_laki'], 'nama', result)].updateCountPart(`${sisaPenyebut}/${pembilang}`);
             result[dataIndex(['cucu_laki_laki'], 'nama', result)].updateFunds(lastFunds);
         }
@@ -333,7 +333,7 @@ class Ahli_Waris {
     // ===============================================
     //  JIKA PUNYA ANAK PEREMPUAN ATAU CUCU PEREMPUAN
     // ===============================================
-    static haveDaughterAndGrand(body, funds) {
+    static haveDaughterAndGrand(body, funds, bahasa) {
         const {
             anak_perempuan, cucu_perempuan, ayah, kakek, suami, istri, ibu, nenek, ibu_kakek, saudara_kandung,
             saudari_kandung, saudara_tiri_seayah, saudari_seayah, anak_laki_laki_saudara_kandung, anak_laki_laki_saudara_tiri_seayah,
@@ -357,29 +357,29 @@ class Ahli_Waris {
         else if (kakek > 0) result.push(new Beneficiary('kakek', '1/6', 1));
         else if (saudara_kandung > 0) {
             if (saudari_kandung > 0) {
-                result.push(new Beneficiary('saudara_kandung', '2 kali lipat saudari kandung', saudara_kandung));
-                result.push(new Beneficiary('saudari_kandung', 'setengah bagian saudara kandung', saudari_kandung));
+                result.push(new Beneficiary('saudara_kandung', bahasa==='id'?'2 kali lipat saudari kandung':'2 times of sister\'s share', saudara_kandung));
+                result.push(new Beneficiary('saudari_kandung', bahasa==='id'?'setengah bagian saudara kandung':'A half of brother\'s share', saudari_kandung));
             }
-            else result.push(new Beneficiary('saudara_kandung', 'sisa pembagian seluruh harta', saudara_kandung));
+            else result.push(new Beneficiary('saudara_kandung', bahasa==='id'?'sisa pembagian seluruh harta':'The remaining of all assets', saudara_kandung));
         }
         else if (saudari_kandung > 0) {
-            result.push(new Beneficiary('saudari_kandung', 'sisa pembagian seluruh harta', saudari_kandung));
+            result.push(new Beneficiary('saudari_kandung', bahasa==='id'?'sisa pembagian seluruh harta':'The remaining of all assets', saudari_kandung));
         }
         else if (saudara_tiri_seayah > 0) {
             if (saudari_seayah > 0) {
-                result.push(new Beneficiary('saudara_tiri_seayah', '2 kali lipat saudari seayah', saudara_tiri_seayah));
-                result.push(new Beneficiary('saudari_seayah', 'setengah bagian saudara seayah', saudari_seayah));
+                result.push(new Beneficiary('saudara_tiri_seayah', bahasa==='id'?'2 kali lipat saudari seayah':'2 times of half-sister (by father) share', saudara_tiri_seayah));
+                result.push(new Beneficiary('saudari_seayah', bahasa==='id'?'setengah bagian saudara seayah':'A half of half-brother (by father) share', saudari_seayah));
             }
-            else result.push(new Beneficiary('saudara_tiri_seayah', 'sisa pembagian seluruh harta', saudara_tiri_seayah));
+            else result.push(new Beneficiary('saudara_tiri_seayah', bahasa==='id'?'sisa pembagian seluruh harta':'The remaining of all assets', saudara_tiri_seayah));
         }
-        else if (saudari_seayah > 0) result.push(new Beneficiary('saudari_seayah', 'sisa pembagian seluruh harta', saudari_seayah));
-        else if (anak_laki_laki_saudara_kandung > 0) result.push(new Beneficiary('anak_laki_laki_saudara_kandung', 'sisa pembagian seluruh harta', anak_laki_laki_saudara_kandung));
-        else if (anak_laki_laki_saudara_tiri_seayah > 0) result.push(new Beneficiary('anak_laki_laki_saudara_tiri_seayah', 'sisa pembagian seluruh harta', anak_laki_laki_saudara_tiri_seayah));
-        else if (saudara_kandung_ayah > 0) result.push(new Beneficiary('saudara_kandung_ayah', 'sisa pembagian seluruh harta', saudara_kandung_ayah));
-        else if (saudara_tiri_seayah_ayah > 0) result.push(new Beneficiary('saudara_tiri_seayah_ayah', 'sisa pembagian seluruh harta', saudara_tiri_seayah_ayah));
-        else if (anak_laki_laki_saudara_kandung_ayah > 0) result.push(new Beneficiary('anak_laki_laki_saudara_kandung_ayah', 'sisa pembagian seluruh harta', anak_laki_laki_saudara_kandung_ayah));
-        else if (anak_laki_laki_saudara_tiri_seayah_ayah > 0) result.push(new Beneficiary('anak_laki_laki_saudara_tiri_seayah_ayah', 'sisa pembagian seluruh harta', anak_laki_laki_saudara_tiri_seayah_ayah));
-        else result.push(new Beneficiary('dzawil_arhaam', 'sisa pembagian seluruh harta', 1));
+        else if (saudari_seayah > 0) result.push(new Beneficiary('saudari_seayah', bahasa==='id'?'sisa pembagian seluruh harta':'The remaining of all assets', saudari_seayah));
+        else if (anak_laki_laki_saudara_kandung > 0) result.push(new Beneficiary('anak_laki_laki_saudara_kandung', bahasa==='id'?'sisa pembagian seluruh harta':'The remaining of all assets', anak_laki_laki_saudara_kandung));
+        else if (anak_laki_laki_saudara_tiri_seayah > 0) result.push(new Beneficiary('anak_laki_laki_saudara_tiri_seayah', bahasa==='id'?'sisa pembagian seluruh harta':'The remaining of all assets', anak_laki_laki_saudara_tiri_seayah));
+        else if (saudara_kandung_ayah > 0) result.push(new Beneficiary('saudara_kandung_ayah', bahasa==='id'?'sisa pembagian seluruh harta':'The remaining of all assets', saudara_kandung_ayah));
+        else if (saudara_tiri_seayah_ayah > 0) result.push(new Beneficiary('saudara_tiri_seayah_ayah', bahasa==='id'?'sisa pembagian seluruh harta':'The remaining of all assets', saudara_tiri_seayah_ayah));
+        else if (anak_laki_laki_saudara_kandung_ayah > 0) result.push(new Beneficiary('anak_laki_laki_saudara_kandung_ayah', bahasa==='id'?'sisa pembagian seluruh harta':'The remaining of all assets', anak_laki_laki_saudara_kandung_ayah));
+        else if (anak_laki_laki_saudara_tiri_seayah_ayah > 0) result.push(new Beneficiary('anak_laki_laki_saudara_tiri_seayah_ayah', bahasa==='id'?'sisa pembagian seluruh harta':'The remaining of all assets', anak_laki_laki_saudara_tiri_seayah_ayah));
+        else result.push(new Beneficiary('dzawil_arhaam', bahasa==='id'?'sisa pembagian seluruh harta':'The remaining of all assets', 1));
 
         if (suami > 0) result.push(new Beneficiary('suami', '1/4', 1));
         else if (istri > 0) result.push(new Beneficiary('istri', '1/8', istri));
@@ -400,7 +400,7 @@ class Ahli_Waris {
             }
             if (result[i].nama === 'cucu_perempuan') {
                 cP = result[i].bagian_hukum_waris.split('/');
-                findKPK.push(+aP[1]);
+                findKPK.push(+cP[1]);
                 pembilangSementara *= +cP[1]
             }
             if (result[i].nama === 'ayah' || result[i].nama === 'kakek') {
@@ -493,9 +493,9 @@ class Ahli_Waris {
             if (saudara_kandung > 0) {
                 if (saudari_kandung > 0) {
                     let pembilangBaru = (saudara_kandung * 2) + saudari_kandung;
-                    result[dataIndex(['saudara_kandung'], 'nama', result)].updateCountPart(`${saudara_kandung * 2}/${pembilangBaru} dari sisa ${sisaPenyebut}/${pembilang}`);
+                    result[dataIndex(['saudara_kandung'], 'nama', result)].updateCountPart(`${saudara_kandung * 2}/${pembilangBaru} ${bahasa==='id'?'dari sisa':'of the remaining'} ${sisaPenyebut}/${pembilang}`);
                     result[dataIndex(['saudara_kandung'], 'nama', result)].updateFunds((saudara_kandung * 2) * lastFunds / pembilangBaru);
-                    result[dataIndex(['saudari_kandung'], 'nama', result)].updateCountPart(`${saudari_kandung}/${pembilangBaru} dari sisa ${sisaPenyebut}/${pembilang}`);
+                    result[dataIndex(['saudari_kandung'], 'nama', result)].updateCountPart(`${saudari_kandung}/${pembilangBaru} ${bahasa==='id'?'dari sisa':'of the remaining'} ${sisaPenyebut}/${pembilang}`);
                     result[dataIndex(['saudari_kandung'], 'nama', result)].updateFunds(saudari_kandung * lastFunds / pembilangBaru);
                 }
                 else {
@@ -510,9 +510,9 @@ class Ahli_Waris {
             else if (saudara_tiri_seayah > 0) {
                 if (saudari_seayah > 0) {
                     let pembilangBaru = (saudara_tiri_seayah * 2) + saudari_seayah;
-                    result[dataIndex(['saudara_tiri_seayah'], 'nama', result)].updateCountPart(`${saudara_tiri_seayah * 2}/${pembilangBaru} dari sisa ${sisaPenyebut}/${pembilang}`);
+                    result[dataIndex(['saudara_tiri_seayah'], 'nama', result)].updateCountPart(`${saudara_tiri_seayah * 2}/${pembilangBaru} ${bahasa==='id'?'dari sisa':'of the remaining'} ${sisaPenyebut}/${pembilang}`);
                     result[dataIndex(['saudara_tiri_seayah'], 'nama', result)].updateFunds((saudara_tiri_seayah * 2) * lastFunds / pembilangBaru);
-                    result[dataIndex(['saudari_seayah'], 'nama', result)].updateCountPart(`${saudari_seayah}/${pembilangBaru} dari sisa ${sisaPenyebut}/${pembilang}`);
+                    result[dataIndex(['saudari_seayah'], 'nama', result)].updateCountPart(`${saudari_seayah}/${pembilangBaru} ${bahasa==='id'?'dari sisa':'of the remaining'} ${sisaPenyebut}/${pembilang}`);
                     result[dataIndex(['saudari_seayah'], 'nama', result)].updateFunds(saudari_seayah * lastFunds / pembilangBaru);
                 }
                 else {
@@ -536,7 +536,7 @@ class Ahli_Waris {
     // =======================================
     //       JIKA PUNYA AYAH ATAU KAKEK
     // =======================================
-    static haveFatherAndGrand(body, funds) {
+    static haveFatherAndGrand(body, funds, bahasa) {
         const {
             ayah, kakek, ibu, nenek, ibu_kakek, suami, istri
         } = body;
@@ -544,7 +544,7 @@ class Ahli_Waris {
         if (suami > 0 || istri > 0) {
             if (suami > 0) result.push(new Beneficiary('suami', '1/2', 1));
             else if (istri > 0) result.push(new Beneficiary('istri', '1/4', istri));
-            result.push(new Beneficiary('ibu', '1/3 dari sisa pembagian seluruh harta', 1));
+            result.push(new Beneficiary('ibu', bahasa==='id'?'1/3 dari sisa pembagian seluruh harta':'1/3 of the remaining of all assets', 1));
         }
         else if (ibu > 0) result.push(new Beneficiary('ibu', '1/3', 1));
 
@@ -605,14 +605,14 @@ class Ahli_Waris {
         let lastFunds = sisaPenyebut * funds / pembilang;
         let name, text = '';
         if (ibu > 0 && result[dataIndex(['ibu'], 'nama', result)].bagian_didapat !== '1/3') {
-            result[dataIndex(['ibu'], 'nama', result)].updateCountPart(`1/3 dari ${sisaPenyebut}/${pembilang}`);
+            result[dataIndex(['ibu'], 'nama', result)].updateCountPart(`${bahasa==='id'?'1/3 dari':'1/3 of'} ${sisaPenyebut}/${pembilang}`);
             result[dataIndex(['ibu'], 'nama', result)].updateFunds(lastFunds / 3);
             lastFunds -= lastFunds / 3;
-            text = ' - 1/3 bagian ibu';
+            text = bahasa==='id'?' - 1/3 bagian ibu':' - 1/3 part of mother\'s share';
         }
         if (ayah > 0) name = 'ayah';
         else name = 'kakek';
-        result.unshift(new Beneficiary(name, 'Sisa pembagian seluruh harta', 1));
+        result.unshift(new Beneficiary(name, bahasa==='id'?'Sisa pembagian seluruh harta':'The remaining of all assets', 1));
         result[dataIndex([name], 'nama', result)].updateCountPart(`${sisaPenyebut}/${pembilang}${text}`);
         result[dataIndex([name], 'nama', result)].updateFunds(lastFunds);
 
@@ -622,7 +622,7 @@ class Ahli_Waris {
     // ================================================
     //  JIKA PUNYA SAUDARA KANDUNG ATAU SAUDARA SEAYAH
     // ================================================
-    static haveSiblings(body, funds) {
+    static haveSiblings(body, funds, bahasa) {
         const {
             saudara_saudari_tiri_seibu, saudara_kandung, saudari_kandung, saudara_tiri_seayah, saudari_seayah, suami, istri, ibu, nenek, ibu_kakek
         } = body;
@@ -729,13 +729,13 @@ class Ahli_Waris {
             result.unshift(new Beneficiary(name[1], `1/2 bagian ${name[0]}`, body[name[1]]));
             result.unshift(new Beneficiary(name[0], `2 kali lipat ${name[1]}`, body[name[0]]));
             let pembilangBaru = (body[name[0]] * 2) + body[name[1]];
-            result[dataIndex([name[0]], 'nama', result)].updateCountPart(`${body[name[0]] * 2}/${pembilangBaru} dari sisa ${sisaPenyebut}/${pembilang}`);
+            result[dataIndex([name[0]], 'nama', result)].updateCountPart(`${body[name[0]] * 2}/${pembilangBaru} ${bahasa==='id'?'dari sisa':'of the remaining'} ${sisaPenyebut}/${pembilang}`);
             result[dataIndex([name[0]], 'nama', result)].updateFunds((body[name[0]] * 2) * lastFunds / pembilangBaru);
-            result[dataIndex([name[1]], 'nama', result)].updateCountPart(`${body[name[1]]}/${pembilangBaru} dari sisa ${sisaPenyebut}/${pembilang}`);
+            result[dataIndex([name[1]], 'nama', result)].updateCountPart(`${body[name[1]]}/${pembilangBaru} ${bahasa==='id'?'dari sisa':'of the remaining'} ${sisaPenyebut}/${pembilang}`);
             result[dataIndex([name[1]], 'nama', result)].updateFunds(body[name[1]] * lastFunds / pembilangBaru);
         }
         else {
-            result.unshift(new Beneficiary(name[0], 'Sisa pembagian seluruh harta', body[name[0]]));
+            result.unshift(new Beneficiary(name[0], bahasa==='id'?'Sisa pembagian seluruh harta':'The remaining of all assets', body[name[0]]));
             result[dataIndex([name[0]], 'nama', result)].updateCountPart(`${sisaPenyebut}/${pembilang}`);
             result[dataIndex([name[0]], 'nama', result)].updateFunds(lastFunds);
         }
@@ -747,7 +747,7 @@ class Ahli_Waris {
     // =======================================
     //           AHLI WARIS LAINNYA
     // =======================================
-    static haveAnother(body, funds) {
+    static haveAnother(body, funds, bahasa) {
         const {
             anak_laki_laki_saudara_kandung, anak_laki_laki_saudara_tiri_seayah, saudara_kandung_ayah, saudara_tiri_seayah_ayah,
             anak_laki_laki_saudara_kandung_ayah, anak_laki_laki_saudara_tiri_seayah_ayah, saudari_kandung, saudari_seayah,

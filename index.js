@@ -6,7 +6,7 @@ exports.handler = async (event) => {
     if (event.body !== null && event.body !== undefined) {
         response = {
             statusCode: 200,
-            body: JSON.stringify(Controller.solving(JSON.parse(event.body))),
+            body: JSON.stringify(Controller.solving(JSON.parse(event.body),JSON.parse(event.body).bahasa)),
         };
     }else{
         response = {

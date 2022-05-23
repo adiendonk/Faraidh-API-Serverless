@@ -2,13 +2,12 @@ const SolveModel = require('../Models/solvingModel');
 
 class Controller {
     static getFormat() {
-        return({ ahli_waris: new SolveModel(), total_harta: 0 });
+        return({ ahli_waris: new SolveModel(), total_harta: 0, bahasa: 'id' });
     }
 
-    static solving( body ) {
-        const result = SolveModel.solving(body);
-        //res.status(200).json({ penerima_waris: result });
-        return({ penerima_waris: result });
+    static solving( body,bahasa ) {
+        const result = SolveModel.solving(body,bahasa);
+        return({ penerima_waris: result ,bahasa: bahasa==='id'?'Bahasa Indonesia':'English'});
     }
 }
 
